@@ -1,0 +1,20 @@
+#message-background {
+  background-color: rgba(100, 100, 100, 0.5);
+  height: 1000%;
+  width: 1000%;
+  border-radius: 10px;
+}
+
+.message {
+  overflow: hidden;
+  left: 50%;
+  position: fixed;
+  top: 50%;
+  background-color: rgba(100, 100, 100, .9);
+  border-radius: 10px;
+}
+
+.message_text {
+  overflow: hidden;
+  padding: 25px;
+}
