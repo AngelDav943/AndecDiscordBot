@@ -97,7 +97,6 @@ client.on('message', async message => {
         if (err.code == "MODULE_NOT_FOUND") { // If the error code is "MODULE_NOT_FOUND" notify to the player that the command doesnt exist
             console.log(err.code)
             console.log(`Error code: ${err.code}`)
-            return message.channel.send("Error: **Command not found**")
         } else {
             console.log(err.code)
             console.log(`EError code: ${err.code}`)
@@ -131,12 +130,20 @@ client.on('message', async message => {
 });
 
 
+var last = ""
 app.get(process.env.httpservice_send, function (req, res) {
     let channelID = req.params["channel"]
     let msg = req.params["message"]
-    let channel = client.channels.cache.get(channelID)
-    channel.send(msg);
-    res.send(msg);
+    let channel = client.channels.cache.get(channelID);
+	last = msg
+	if (last != msh) {
+    	channel.send(msg);
+    	res.send(msg);
+	} 
+	else
+	{
+		res.send("not sent")
+	}
 });
 
 app.use(function(req, res) {
