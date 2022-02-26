@@ -18,7 +18,7 @@ module.exports = {
         var req = GetArgsReq(args).split(" ")
         // Separating poll arguments
         var pollargs = GetArgsReq(req).split("|")
-        if (!pollargs[1]) return message.channel.send("You need to state the vote message and time **(example: createpoll (example: Do you like apples?) | (example: 5d) )**")
+        if (!pollargs[1]) return message.channel.send("You need to state the vote message and time **(example: ;createpoll Do you like apples? | 5d )**")
         
         // Getting the time
         var timeargs = pollargs[1].split(" ")

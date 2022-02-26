@@ -135,8 +135,7 @@ app.get(process.env.httpservice_send, function (req, res) {
     let channelID = req.params["channel"]
     let msg = req.params["message"]
     let channel = client.channels.cache.get(channelID);
-	last = msg
-	if (last != msh) {
+	if (last != msg) {
     	channel.send(msg);
     	res.send(msg);
 	} 
@@ -144,6 +143,7 @@ app.get(process.env.httpservice_send, function (req, res) {
 	{
 		res.send("not sent")
 	}
+	last = msg
 });
 
 app.use(function(req, res) {
