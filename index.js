@@ -146,8 +146,10 @@ app.get(process.env.httpservice_send, function (req, res) {
 	last = msg
 });
 
+
 app.use(function(req, res) {
-    res.redirect("https://angeldc943.repl.co/")
+    res.send("server online.")
 });
 
+console.log(client.login)
 client.login(process.env['BOT_KEY']);
