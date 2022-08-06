@@ -132,11 +132,12 @@ client.on('message', async message => {
 
 var last = ""
 app.get(process.env.httpservice_send, function (req, res) {
+	console.log(req.params)
     let channelID = req.params["channel"]
     let msg = req.params["message"]
     let channel = client.channels.cache.get(channelID);
 	if (last != msg) {
-    	channel.send(msg);
+    	channel.send(msg.toString());
     	res.send(msg);
 	} 
 	else
