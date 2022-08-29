@@ -52,15 +52,15 @@ app.get('/getBotData', function (req, res) {
 });
 
 client.on('message', async message => {
+	if (message.author.bot) return
     
     let saveProb = Math.random();
     //console.log(saveProb);
-    if (!message.content.startsWith(prefix) && saveProb >= 0.87 && message.author.bot == false) {
-        console.log(message)
+    if (!message.content.startsWith(prefix) && saveProb >= 0.87) {
+        console.log(message.content)
         randommessage.message = message;
     }
 
-	if (message.author.bot) return
     if (!message.content.startsWith(prefix)) return // if the command doesnt start with prefix return
     
     var args = message.content.substring(prefix.length).toLowerCase().split(" ");
@@ -131,12 +131,12 @@ client.on('message', async message => {
 
 
 var last = ""
-app.get(process.env.httpservice_send, function (req, res) {
+/*app.get(process.env.httpservice_send, function (req, res) {
 	console.log(req.params)
     let channelID = req.params["channel"]
     let msg = req.params["message"]
     let channel = client.channels.cache.get(channelID);
-	if (last != msg) {
+	if (channel && last != msg) {
     	channel.send(msg.toString());
     	res.send(msg);
 	} 
@@ -145,12 +145,11 @@ app.get(process.env.httpservice_send, function (req, res) {
 		res.send("not sent")
 	}
 	last = msg
-});
+});*/
 
 
 app.use(function(req, res) {
     res.send("server online.")
 });
 
-console.log(client.login)
 client.login(process.env['BOT_KEY']);
