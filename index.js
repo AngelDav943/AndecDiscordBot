@@ -3,7 +3,7 @@ let app = express()
 let Discord = require("discord.js");
 let client = new Discord.Client();
 let cors = require('cors')
-require('dotenv').config()
+//require('dotenv').config()
 
 let fs = require("fs")
 let ns = require("ms");
