@@ -9,9 +9,6 @@ let fs = require("fs")
 let ns = require("ms");
 let config = require("./config.json");
 
-let Database = require("@replit/database");
-let db = new Database();
-
 app.use(cors())
 
 let listener = app.listen(process.env.PORT, () => {
@@ -114,7 +111,7 @@ client.on('message', async message => {
             if (!perms) return message.channel.send("Error: **You dont have enough permissions**")
 
             try {
-                cmdreq.execute(message,args.join(" ").split(" "),Discord,db).then(data => {
+                cmdreq.execute(message,args.join(" ").split(" "),Discord,client).then(data => {
                     cmddata = data
                 });
             } catch (err) {
@@ -129,24 +126,28 @@ client.on('message', async message => {
     
 });
 
-
+/*
 var last = ""
-/*app.get(process.env.httpservice_send, function (req, res) {
-	console.log(req.params)
-    let channelID = req.params["channel"]
-    let msg = req.params["message"]
-    let channel = client.channels.cache.get(channelID);
-	if (channel && last != msg) {
-    	channel.send(msg.toString());
-    	res.send(msg);
-	} 
-	else
+app.get(process.env.httpservice_send, function (req, res) {
+	if (process.env.httpservice_key == req.params.key)
 	{
-		res.send("not sent")
+		
+		console.log(req.params)
+	    let channelID = req.params["channel"]
+	    let msg = req.params["message"]
+	    let channel = client.channels.cache.get(channelID);
+		if (channel && last != msg) {
+	    	channel.send(msg.toString());
+	    	res.send(msg);
+		} 
+		else
+		{
+			res.send("not sent")
+		}
+		//last = msg
 	}
-	last = msg
-});*/
-
+});
+//*/
 
 app.use(function(req, res) {
     res.send("server online.")
