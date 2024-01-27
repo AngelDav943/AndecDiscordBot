@@ -2,9 +2,12 @@ let fetch = require('node-fetch')
 
 module.exports = {
     type:"test",
-    hided:true,
-    perms:"default",
+    hidden:true,
+    /*perms:"default",*/
     description:"",
+
+    perms: "botcreator",
+    
     async execute(message, args) {
         let fetch_url = "https://AndecDiscordBot-Handler-1.angeldc943.repl.co/getRandMessage"
 

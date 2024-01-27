@@ -1,7 +1,7 @@
 module.exports = {
     description:"Hax ppl with this command!!!111! (Joke command)",
     //perms:"Mod",
-    hided:true,
+    hidden:true,
     async execute(message, args) {
         const target = message.mentions.users.first();
         if (!target) return message.channel.send("<@!" + message.author.id + ">" + ", This person wasnt found in this server");

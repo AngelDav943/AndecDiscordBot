@@ -15,6 +15,9 @@ for (var i=0; i < commands.length; i++) {
 module.exports = {
     type:"datastore test",
     description:"datastore/database command list ",
+
+    perms: "botcreator",
+    
     async execute(message, args, discord) {
         var MessageEmbed = new discord.MessageEmbed()
                 .setTitle('***Datastore commands***')

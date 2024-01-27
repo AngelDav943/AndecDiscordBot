@@ -21,9 +21,12 @@ function timeFromTimestamp(timestamp, hidetime) {
 
 module.exports = {
     type:"",
-    hided:false,
+    hidden:false,
     perms:"",
     description:"This command can give you user data from the https://angeldc943.repl.co webiste",
+
+    perms: "botcreator",
+
     async execute(message, args, discord) {
         let fetch_url = 'https://angeldc943.repl.co/api/users/get'
         message.channel.send("Showing data of user with id: "+args[1])

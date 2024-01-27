@@ -1,6 +1,6 @@
 module.exports = {
     type:"",
-    hided:false,
+    hidden:false,
     perms:"",
     description:"",
     async execute(message, args, discord) {

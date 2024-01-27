@@ -2,8 +2,12 @@ let express = require("express")
 let app = express()
 let Discord = require("discord.js");
 let client = new Discord.Client();
+
 let cors = require('cors')
-//require('dotenv').config()
+require('dotenv').config()
+
+let replitDatabase = require("@replit/database");
+let database = new replitDatabase()
 
 let fs = require("fs")
 let ns = require("ms");
@@ -111,7 +115,7 @@ client.on('message', async message => {
             if (!perms) return message.channel.send("Error: **You dont have enough permissions**")
 
             try {
-                cmdreq.execute(message,args.join(" ").split(" "),Discord,client).then(data => {
+                cmdreq.execute(message,args.join(" ").split(" "),Discord, client, database).then(data => {
                     cmddata = data
                 });
             } catch (err) {

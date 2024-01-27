@@ -2,7 +2,7 @@ const ytdl = require('ytdl-core');
 
 module.exports = {
     type:"test",
-    hided:true,
+    hidden:true,
     description:"just a voicechannel test",
     async execute(message, args) {
         let connection;

@@ -1,6 +1,6 @@
 module.exports = {
     type:"datastore test",
-    hided:true,
+    hidden:true,
     description:"gets all the keys of database (Only bot owner can access) ",
 	perms:"botcreator",
     async execute(message, args, discord, db) {

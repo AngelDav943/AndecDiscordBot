@@ -1,7 +1,10 @@
 module.exports = {
     type:"datastore test",
-    hided:true,
+    hidden:true,
     description:"Get data of a specified key",
+
+    perms: "botcreator",
+    
     async execute(message, args, discord, db) {
         console.log(args);
         db.get("key").then(value => {

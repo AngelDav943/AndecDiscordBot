@@ -3,7 +3,7 @@ var fs = require('fs');
 module.exports = {
     type:"datastore test",
     description:"test command index ",
-    hided:true,
+    hidden:true,
     async execute(message, args, discord, client) {
 		if (!args[1]) return message.channel.send(";test.voice ( join | leave )")
 		console.log(args[1])

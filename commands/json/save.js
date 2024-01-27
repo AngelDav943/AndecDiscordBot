@@ -2,23 +2,33 @@ const fs = require("fs")
 
 module.exports = {
     type:"test",
-    hided:true,
+    hidden:true,
     description:"just a test",
     async execute(message, args) {
-        let user = {
-            "test123#1234": {
-                rblxname: 'test999'
-            }
-        };
+        const fileData = fs.readFileSync('data/users.json', {encoding: 'utf8'})
+        var parsedData = JSON.parse(fileData)
 
-        const data = JSON.stringify(user);
-        fs.writeFile('data/users.json', data, 'utf8', (err) => {
-            if (err) {
-                message.channel.send(`Error writing file: ${err}`);
-            } else {
-                message.channel.send(`File is written successfully!`);
-            }
+        var sentMessage = args.slice(1)
+        var key = sentMessage.shift()
+        var value = sentMessage.join(" ")
+        
+        console.log(String(key).length)
+        console.log(value == "")
 
+        if (String(key).length >= 75) return message.channel.send("Error saving: the key name is too long")
+        if (String(value).length >= 75) return message.channel.send("Error saving: the key's value is too long")
+        
+        if (value == "") {
+            value = key
+            key = "key"
+        }
+
+        parsedData[key] = value
+        
+        const stringifiedData = JSON.stringify(parsedData);
+        fs.writeFile('data/users.json', stringifiedData, 'utf8', (err) => {
+            if (err) return message.channel.send(`Error writing file: ${err}`);
+            message.channel.send(`File is written successfully!`);
         });
     }
 }

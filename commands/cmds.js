@@ -10,7 +10,7 @@ for (var i = 0; i < commands.length; i++) {
 		let cmddescr = '';
 		cmddescr = require(__dirname + '/' + cmd).description;
 
-		if (require(__dirname + '/' + cmd).hided != true) {
+		if (require(__dirname + '/' + cmd).hidden != true) {
 			cmd = cmd.split('.js').join('');
 			description = description + ` **;${cmd}** | ${cmddescr} \n\n `;
 		}
@@ -21,7 +21,7 @@ for (var i = 0; i < commands.length; i++) {
 			try {
 				let cmddescr = require(dir).description;
 
-				if (require(dir).hided != true) {
+				if (require(dir).hidden != true) {
 					foldercmds[f] = '.' + foldercmds[f].split('.js').join('');
 					if (foldercmds[f] == '.index') foldercmds[f] = '';
 					description =
@@ -33,7 +33,7 @@ for (var i = 0; i < commands.length; i++) {
 }
 
 module.exports = {
-	hided: true,
+	hidden: true,
 	description: 'This commands shows a list of all the commands the bot haves',
 	async execute(message, args, discord) {
 		var MessageEmbed = new discord.MessageEmbed()

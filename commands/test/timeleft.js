@@ -3,7 +3,7 @@ var fs = require('fs');
 module.exports = {
     type:"datastore test",
     description:"test command index ",
-    hided:true,
+    hidden:true,
     async execute(message, args, discord) {
 		var difference = 1641013200000 - Date.now()
 
