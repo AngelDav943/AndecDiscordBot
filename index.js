@@ -2,7 +2,6 @@ const actions = require('./actions/actions.js')
 
 const express = require("express");
 const app = express()
-const http = require('http').Server(app);
 const page = require('angeldav-loaderhtml');
 const config = require("./config.json");
 const port = config["port"] || 80;
@@ -139,7 +138,7 @@ const pageloader = require(`angeldav-test-pageloader`)(page, {
 })
 // WEBSITE ENDS HERE
 
-http.listen(port, () => {
+const listener = app.listen(port, () => {
     console.log(`Server started, port located at ${port}`);
     console.log(`http://localhost:${port}`)
 });
