@@ -1,10 +1,10 @@
 nav {
-    width: calc(100% + 2em);
+    width: calc(100% + 2rem);
     margin: auto;
     background-color: gainsboro;
-    height: 3em;
-    margin: 0 -1em;
-    margin-bottom: 1em;
+    height: 64px;
+    margin: 0 -1rem;
+    margin-bottom: 1rem;
     
     overflow: hidden;
 
@@ -15,6 +15,7 @@ nav {
 nav .left {
     display: flex;
     align-items: center;
+    font-size: 1.5rem;
 }
 
 nav .right {
@@ -24,7 +25,7 @@ nav .right {
 
 nav a.logo, nav p.logo {
     font-weight: bolder;
-    padding: 1em;
+    padding: 1rem;
 }
 
 nav img.logo {
@@ -33,14 +34,14 @@ nav img.logo {
 
 nav a {
     text-decoration: none;
-    padding: 1em;
+    padding: 1rem;
     background-color: #00000000;
     color: black;
 }
 
 nav a:hover {
     text-decoration: none;
-    padding: 1em;
+    padding: 1rem;
     color: white;
     background-color: #00000065;
 }
@@ -52,7 +53,7 @@ nav a:hover {
 
     nav .left{
         cursor: pointer;
-        /*gap: 1em;*/
+        /*gap: 1rem;*/
     }
 
     nav .logo {
@@ -65,7 +66,7 @@ nav a:hover {
 
     nav img.logo {
         float: left;
-        height: 3em;
+        height: 64px;
     }
 
     nav.open {
