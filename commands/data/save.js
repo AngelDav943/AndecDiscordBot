@@ -1,9 +1,9 @@
 const fs = require("fs")
 
 module.exports = {
-    type:"test",
+    type:"json test",
     hidden:true,
-    description:"just a test",
+    description:"Saves data, syntax: ';json.save **key** *value*' ",
     async execute(message, args) {
         const fileData = fs.readFileSync('data/users.json', {encoding: 'utf8'})
         var parsedData = JSON.parse(fileData)

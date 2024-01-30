@@ -5,7 +5,8 @@ module.exports = {
     description:"test command index ",
     hidden:true,
     async execute(message, args, discord) {
-		var difference = 1641013200000 - Date.now()
+		//1641013200000
+		var difference = 1735707600000 - Date.now()
 
 		const time = {
 			days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -19,7 +20,8 @@ module.exports = {
 		}
 
 		if (difference > 0) {
-        	message.channel.send (`Year ends in: ${time.hours}:${time.minutes}:${time.seconds}!!!!!!!!!!!`)
+			if (difference < 8.64e+7) return message.channel.send (`Year ends in: ${time.hours}:${time.minutes}:${time.seconds}!!!!!!!!!!!`)
+        	return message.channel.send(`${time.days} days left`)
 		} else {
 			message.channel.send (`HAPPY NEW YEAR!!!!`)
 		}

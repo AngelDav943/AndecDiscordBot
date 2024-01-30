@@ -2,7 +2,7 @@ let fetch = require('node-fetch');
 
 module.exports = {
     type:"",
-    hidden:false,
+    hidden:true,
     perms:"",
     description:"This command can give you user data from the https://angeldc943.repl.co webiste",
 

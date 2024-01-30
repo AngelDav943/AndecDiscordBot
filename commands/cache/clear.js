@@ -6,6 +6,7 @@ module.exports = {
             delete require.cache[key]
         })
         console.log('CACHE CLEARED')
-        message.channel.send('cache cleared.')
+        //message.channel.send('cache cleared.')
+        message.react("<:success:1192903763988594808>")
     }
 }

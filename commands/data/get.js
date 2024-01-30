@@ -1,9 +1,9 @@
 const fs = require("fs")
 
 module.exports = {
-	type: "test",
+	type: "json test",
 	hidden: true,
-	description: "just a test",
+	description: "Gives a list of all saved keys with their respective values.",
 	/*perms: "botcreator",*/
 	async execute(message, args, discord) {
 		fs.readFile('data/users.json', 'utf8', function (err, data) {
