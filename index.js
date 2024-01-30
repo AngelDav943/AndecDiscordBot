@@ -4,7 +4,7 @@ const express = require("express");
 const app = express()
 const page = require('angeldav-loaderhtml');
 const config = require("./config.json");
-const port = config["port"] || 80;
+var port = config["port"] || 80;
 
 const Discord = require("discord.js");
 const client = new Discord.Client(/*{ intents: [GatewayIntentBits.Guilds] }*/);
@@ -138,8 +138,10 @@ const pageloader = require(`angeldav-test-pageloader`)(page, {
 })
 // WEBSITE ENDS HERE
 
-const listener = app.listen(port, () => {
-    console.log(`Server started, port located at ${port}`);
+const listener = app.listen(process.env.PORT, () => {
+    port = listener.address().port;
+    page.url = `http://localhost:${port}`;
+    console.log(`Server started, port located at ${listener.address().port}`);
     console.log(`http://localhost:${port}`)
 });
 
