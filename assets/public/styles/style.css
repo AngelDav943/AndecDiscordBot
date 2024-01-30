@@ -25,7 +25,7 @@ p {
 section.main {
     padding: 0rem 1rem;
     background-color: whitesmoke;
-    height: calc(100% - 40px);
+    height: calc(100%);
     max-height: 100vh;
     max-width: calc( 700px - 2rem);
     width: calc(100vw - 2rem);
@@ -36,10 +36,6 @@ footer {
     background-color: black;
     background: linear-gradient(90deg, #1b0300, #15162a);
     color: white;
-    vertical-align: middle;
-    height: 40px;
-
-    max-width: calc( 700px);
-    width: calc(100vw);
-    margin: auto;
+    margin: -1rem;
+    margin-bottom: 0;
 }
