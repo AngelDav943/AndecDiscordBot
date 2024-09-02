@@ -1,28 +1,30 @@
 {
   "name": "AndecDiscordBot-Handler",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
+    "deploy:commands": "ts-node deploy-commands.ts",
+    "start": "ts-node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/builders": "^1.8.2",
     "@discordjs/voice": "^0.16.1",
     "angeldav-loaderhtml": "^1.2.10",
     "angeldav-test-pageloader": "^1.0.10-d",
     "cors": "^2.8.5",
-    "discord.js": "^12.5.3",
+    "discord.js": "^14.15.3",
     "dotenv": "^16.0.0",
     "express": "^4.17.1",
+    "ffmpeg-static": "^5.2.0",
     "fs": "0.0.1-security",
+    "libsodium-wrappers": "^0.7.15",
     "ms": "^2.1.3",
     "node-fetch": "^2.6.1",
     "uptime-robot": "^1.3.0"
-  },
-  "devDependencies": {
-    
   },
   "repository": {
     "type": "git",
@@ -32,5 +34,8 @@
     "url": "https://github.com/AngelDav943/AndecDiscordBot/issues"
   },
   "homepage": "https://github.com/AngelDav943/AndecDiscordBot#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.5.2"
+  }
 }
