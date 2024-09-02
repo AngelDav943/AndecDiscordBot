@@ -64,10 +64,10 @@ var randommessage = {
     content: ""
 };
 
+const commandCollection = getCommandsCollection();
 client.on(Events.InteractionCreate, async (interaction: Interaction<CacheType>) => {
     if (interaction.isChatInputCommand() == false) return;
     
-    const commandCollection = getCommandsCollection();
     const commandPath = commandCollection.get(interaction.commandName);
 
     if (!commandPath) {

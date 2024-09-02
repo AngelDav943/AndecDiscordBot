@@ -16,14 +16,28 @@ import { consoleColor, consoleTextColors } from '../../../utils';
 
 module.exports = {
     type: "test",
-    hidden: true,
     data: new SlashCommandBuilder()
         .setName("testvoice")
-        .setDescription("just a voicechannel test"),
+        .setDescription("just a voicechannel test")
+        .addStringOption(option => {
+            return option
+                .setName("url")
+                .setDescription("A valid url that must contain a music file")
+                .setRequired(true)
+        }),
     async execute(interaction: ChatInputCommandInteraction) {
 
+        const linkURL = interaction.options.getString("url")
+        if (linkURL == null) {
+            await interaction.reply({
+                content: 'Invalid url',
+                ephemeral: true
+            })
+            return
+        }
+
         const deferredReply = await interaction.deferReply({
-            ephemeral: true
+            ephemeral: false
         })
 
         async function attemptConnection(): Promise<boolean> {
@@ -39,7 +53,7 @@ module.exports = {
             const guildID = voice.guild.id
             if (guildID == null || guildID == undefined) return false
             if (channelID == null || channelID == undefined) return false
-            
+
             try {
                 const player = createAudioPlayer({
                     behaviors: {
@@ -53,24 +67,24 @@ module.exports = {
                     adapterCreator: voice.guild.voiceAdapterCreator,
                 })
 
-                const audio = createAudioResource(`https://angeldav.net/audios/soundtrack/shop.mp3`, {
+                const audio = createAudioResource(`${linkURL}`/*`https://angeldav.net/audios/soundtrack/shop.mp3`*/, {
                     inputType: StreamType.Arbitrary
                 })
                 player.play(audio)
-                
+
                 voiceConnect.subscribe(player)
 
             } catch (error) {
                 consoleColor(consoleTextColors.Red, "Voicechannel error", String(error))
                 return false
             }
-            
+
             return true
         }
 
         if (await attemptConnection()) {
             deferredReply.edit({
-                content: "Connected successfully"
+                content: `Playing: *${linkURL}*`
             })
         } else {
             deferredReply.edit({

@@ -14,7 +14,6 @@ module.exports = {
 		for (const key in commandList) {
 			const command = commandList[key] as Command
 			if ('data' in command) {
-				console.log("c", command)
 				commandListDescription += `**/${command.data.name}** - *${command.data.description}* \n`
 			}
 		}
