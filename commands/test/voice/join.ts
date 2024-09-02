@@ -41,6 +41,12 @@ module.exports = {
             if (channelID == null || channelID == undefined) return false
             
             try {
+                const player = createAudioPlayer({
+                    behaviors: {
+                        noSubscriber: NoSubscriberBehavior.Pause,
+                    }
+                });
+
                 const voiceConnect = joinVoiceChannel({
                     channelId: channelID,
                     guildId: guildID,
@@ -50,13 +56,8 @@ module.exports = {
                 const audio = createAudioResource(`https://angeldav.net/audios/soundtrack/shop.mp3`, {
                     inputType: StreamType.Arbitrary
                 })
-                const player = createAudioPlayer({
-                    behaviors: {
-                        noSubscriber: NoSubscriberBehavior.Pause,
-                    }
-                });
-
                 player.play(audio)
+                
                 voiceConnect.subscribe(player)
 
             } catch (error) {
