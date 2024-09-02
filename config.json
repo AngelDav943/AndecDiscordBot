@@ -1,6 +1,9 @@
 {
   "port": 80,
   "prefix":";",
-  "version": "2024-Feb17:000(smallfix)",
-  "IdOwner":"356115020721029132"
+  "version": "2024-Sep01:000UNSTABLE(slashTesting)",
+  "IdOwner":"356115020721029132",
+
+  "clientId": "722845425341694013",
+  "guildId": "766724374748332094"
 }
