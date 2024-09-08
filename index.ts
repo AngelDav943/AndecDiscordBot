@@ -22,6 +22,9 @@ var port = config["port"] || 80;
 
 require('dotenv').config()
 
+const cors = require('cors')
+app.use(cors);
+
 // const Discord = require("discord.js");
 
 const client = new Client({

@@ -1,95 +1,198 @@
 //const ytdl = require('ytdl-core');
-import {
-    joinVoiceChannel,
-    createAudioPlayer,
-    createAudioResource,
-    entersState,
-    StreamType,
-    AudioPlayerStatus,
-    VoiceConnectionStatus,
-    DiscordGatewayAdapterImplementerMethods,
-    DiscordGatewayAdapterLibraryMethods,
-    NoSubscriberBehavior
-} from '@discordjs/voice'
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { consoleColor, consoleTextColors } from '../../../utils';
+import { 
+    AudioPlayer,
+    AudioResource,
+    createAudioPlayer,
+    createAudioResource,
+    joinVoiceChannel,
+    NoSubscriberBehavior,
+    StreamType,
+    VoiceConnection
+} from '@discordjs/voice';
+
+import youtubeDl from 'youtube-dl-exec';
+import { platform } from 'os';
 
 module.exports = {
     type: "test",
     data: new SlashCommandBuilder()
-        .setName("testvoice")
-        .setDescription("just a voicechannel test")
+        .setName("play")
+        .setDescription("Plays audio on the voicechannel you're in")
+        .addAttachmentOption(option => {
+            return option
+                .setName("file")
+                .setDescription("Plays the file if it's a valid video or audio")
+        })
         .addStringOption(option => {
             return option
                 .setName("url")
-                .setDescription("A valid url that must contain a music file")
-                .setRequired(true)
+                .setDescription("A valid url that must contain a music link or yt")
+        })
+        .addBooleanOption(option => {
+            return option
+                .setName("loop")
+                .setDescription("Let's you loop the song indefinetly")
         }),
     async execute(interaction: ChatInputCommandInteraction) {
-
-        const linkURL = interaction.options.getString("url")
-        if (linkURL == null) {
+        if (platform() == "android") {
             await interaction.reply({
-                content: 'Invalid url',
+                content: 'Invalid architecture',
                 ephemeral: true
             })
             return
+        };
+
+        const canLoop = interaction.options.getBoolean("loop")
+        const linkURL = interaction.options.getString("url")
+        const file = interaction.options.getAttachment("file")
+
+        let songName: string = ""
+        let songURL: string | null = null
+        if (file) {
+            songURL = file.url
+            songName = file.name
+        } else {
+            if (linkURL != null) {
+                songURL = linkURL
+                songName = linkURL
+            } else {
+                await interaction.reply({
+                    content: 'Invalid',
+                    ephemeral: true
+                })
+                return
+            }
         }
 
         const deferredReply = await interaction.deferReply({
             ephemeral: false
         })
 
-        async function attemptConnection(): Promise<boolean> {
+        enum connectionStatus {
+            Success = 1,
+            Unsuccessful = -1,
+            Error = 0
+        }
+
+        async function attemptConnection(): Promise<connectionStatus> {
             const member = interaction.member
-            if (member == null) return false;
+            if (member == null) return connectionStatus.Unsuccessful;
 
             const target = interaction.guild?.members.cache.get(member.user.id);
-            if (target == null) return false;
+            if (target == null) return connectionStatus.Unsuccessful;
 
             const voice = target.voice
 
             const channelID = voice.channelId
             const guildID = voice.guild.id
-            if (guildID == null || guildID == undefined) return false
-            if (channelID == null || channelID == undefined) return false
+            if (guildID == null || guildID == undefined) return connectionStatus.Unsuccessful
+            if (channelID == null || channelID == undefined) return connectionStatus.Unsuccessful
 
             try {
-                const player = createAudioPlayer({
+                const player: AudioPlayer = createAudioPlayer({
                     behaviors: {
                         noSubscriber: NoSubscriberBehavior.Pause,
                     }
                 });
 
-                const voiceConnect = joinVoiceChannel({
+                const voiceConnect: VoiceConnection = joinVoiceChannel({
                     channelId: channelID,
                     guildId: guildID,
                     adapterCreator: voice.guild.voiceAdapterCreator,
                 })
 
-                const audio = createAudioResource(`${linkURL}`/*`https://angeldav.net/audios/soundtrack/shop.mp3`*/, {
-                    inputType: StreamType.Arbitrary
-                })
-                player.play(audio)
+                if (songURL == null) {
+                    throw new Error("No url found for song")
+                }
+
+                if (songURL.includes("youtu.be") || songURL.includes("youtube.com")) {
+
+                    /*
+                    deferredReply.edit({
+                        content: `Youtube not supported, sorry. AngelDav943 gave `
+                    })
+
+                    throw new Error("Youtube not supported")
+                    //*/
+
+                    //*
+                    const youtube_payload = await youtubeDl(songURL, {
+                        dumpSingleJson: true,
+                        noCheckCertificates: true,
+                        noWarnings: true,
+                        preferFreeFormats: true,
+                        extractAudio: true,
+                        addHeader: ['referer:youtube.com', 'user-agent:googlebot']
+                    })
+
+                    const downloads = youtube_payload.requested_downloads
+
+                    if (downloads.length < 1) {
+                        deferredReply.edit({
+                            content: `Error downloading video`
+                        })
+                        throw new Error("Unsuccessfull download")
+                    }
+
+                    const requestedDownload: any = downloads[0]
+
+                    // console.log("YOUTUBELINK:", requestedDownload["url"]);
+                    const audio: AudioResource = createAudioResource(`${requestedDownload["url"]}`, {
+                        inputType: StreamType.WebmOpus
+                    })
+                    player.play(audio)
+                } else {
+                    const audio: AudioResource = createAudioResource(`${songURL}`, {
+                        inputType: StreamType.Arbitrary
+                    })
+                    player.play(audio)
+                    console.log("audio PLAYABLE:", player.checkPlayable())
+                }
 
                 voiceConnect.subscribe(player)
 
+                // const audio: AudioResource = createAudioResource(`${linkURL}`/*`https://angeldav.net/audios/soundtrack/shop.mp3`*/, {
+                //     inputType: StreamType.Arbitrary
+                // })
+                // player.play(audio)
+
+
+
+
+                /*player.on("stateChange", e => {
+                    if (e.status == "playing" && canLoop == true) {
+                        
+                    }
+                    //console.log("stateChange", e)
+                })*/
+
+
             } catch (error) {
                 consoleColor(consoleTextColors.Red, "Voicechannel error", String(error))
-                return false
+                return connectionStatus.Error
             }
 
-            return true
+            return connectionStatus.Success
         }
 
-        if (await attemptConnection()) {
-            deferredReply.edit({
-                content: `Playing: *${linkURL}*`
-            })
-        } else {
-            deferredReply.edit({
-                content: "Unsuccessful connection"
-            })
+        const connectionResult = await attemptConnection()
+        switch (connectionResult) {
+            case connectionStatus.Success:
+                deferredReply.edit({
+                    content: `Playing: *${songURL}*`
+                })
+                break;
+
+            case connectionStatus.Unsuccessful:
+                deferredReply.edit({
+                    content: "Unsuccessful connection"
+                })
+                break;
+
+            default:
+                break;
         }
 
         //message.channel.send(__dirname+"/audios/"+args[1])
