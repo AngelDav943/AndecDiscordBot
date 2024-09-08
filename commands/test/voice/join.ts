@@ -1,7 +1,7 @@
 //const ytdl = require('ytdl-core');
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { consoleColor, consoleTextColors } from '../../../utils';
-import { 
+import {
     AudioPlayer,
     AudioResource,
     createAudioPlayer,
@@ -107,70 +107,69 @@ module.exports = {
                     throw new Error("No url found for song")
                 }
 
-                if (songURL.includes("youtu.be") || songURL.includes("youtube.com")) {
-
-                    /*
-                    deferredReply.edit({
-                        content: `Youtube not supported, sorry. AngelDav943 gave `
-                    })
-
-                    throw new Error("Youtube not supported")
-                    //*/
-
-                    //*
-                    const youtube_payload = await youtubeDl(songURL, {
-                        dumpSingleJson: true,
-                        noCheckCertificates: true,
-                        noWarnings: true,
-                        preferFreeFormats: true,
-                        extractAudio: true,
-                        addHeader: ['referer:youtube.com', 'user-agent:googlebot']
-                    })
-
-                    const downloads = youtube_payload.requested_downloads
-
-                    if (downloads.length < 1) {
-                        deferredReply.edit({
-                            content: `Error downloading video`
+                async function getResource(link: string) {
+                    if (link.includes("youtu.be") || link.includes("youtube.com")) {
+                        const youtube_payload = await youtubeDl(link, {
+                            dumpSingleJson: true,
+                            noCheckCertificates: true,
+                            noWarnings: true,
+                            preferFreeFormats: true,
+                            extractAudio: true,
+                            addHeader: ['referer:youtube.com', 'user-agent:googlebot']
                         })
-                        throw new Error("Unsuccessfull download")
+
+                        const downloads = youtube_payload.requested_downloads
+                        console.log("DOWNLOADS (", downloads.length, ")")
+
+                        if (downloads.length < 1) {
+                            deferredReply.edit({
+                                content: `Error downloading video`
+                            })
+                            throw new Error("Unsuccessfull download")
+                        }
+
+                        const requestedDownload: any = downloads[0]
+
+                        // console.log("YOUTUBELINK:", requestedDownload["url"]);
+                        const audio: AudioResource = createAudioResource(`${requestedDownload["url"]}`, {
+                            inputType: StreamType.WebmOpus,
+                        })
+                        return audio;
+                    } else {
+                        const audio: AudioResource = createAudioResource(`${link}`, {
+                            inputType: StreamType.Arbitrary
+                        })
+                        return audio;
                     }
-
-                    const requestedDownload: any = downloads[0]
-
-                    // console.log("YOUTUBELINK:", requestedDownload["url"]);
-                    const audio: AudioResource = createAudioResource(`${requestedDownload["url"]}`, {
-                        inputType: StreamType.WebmOpus
-                    })
-                    player.play(audio)
-                } else {
-                    const audio: AudioResource = createAudioResource(`${songURL}`, {
-                        inputType: StreamType.Arbitrary
-                    })
-                    player.play(audio)
-                    console.log("audio PLAYABLE:", player.checkPlayable())
                 }
 
-                voiceConnect.subscribe(player)
+                if (songURL) {   
+                    const audio = await getResource(songURL)
+                    player.play(audio)
+                    voiceConnect.subscribe(player)
+
+                    player.on("stateChange", e => {
+                        if (e.status == "playing" && audio.ended && canLoop == true) {
+                            const newResource = createAudioResource(songURL)
+                            player.play(newResource)
+                        }
+                    })
+                } else {
+                    console.log("link not found", songURL)
+                }
 
                 // const audio: AudioResource = createAudioResource(`${linkURL}`/*`https://angeldav.net/audios/soundtrack/shop.mp3`*/, {
                 //     inputType: StreamType.Arbitrary
                 // })
                 // player.play(audio)
-
-
-
-
-                /*player.on("stateChange", e => {
-                    if (e.status == "playing" && canLoop == true) {
-                        
-                    }
-                    //console.log("stateChange", e)
-                })*/
+                
 
 
             } catch (error) {
                 consoleColor(consoleTextColors.Red, "Voicechannel error", String(error))
+                deferredReply.edit({
+                    content: `ERROR ${error}`
+                })
                 return connectionStatus.Error
             }
 
