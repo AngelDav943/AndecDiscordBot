@@ -148,10 +148,19 @@ module.exports = {
                     player.play(audio)
                     voiceConnect.subscribe(player)
 
-                    player.on("stateChange", e => {
+                    let preloadedResource: AudioResource | null = null
+                    if (canLoop == true) {
+                        preloadedResource = await getResource(songURL)
+                    }
+
+                    player.on("stateChange", async e => {
                         if (e.status == "playing" && audio.ended && canLoop == true) {
-                            const newResource = createAudioResource(songURL)
-                            player.play(newResource)
+                            if (preloadedResource == null) {
+                                preloadedResource = await getResource(songURL)
+                            }
+                            player.play(preloadedResource)
+
+                            preloadedResource = await getResource(songURL)
                         }
                     })
                 } else {
